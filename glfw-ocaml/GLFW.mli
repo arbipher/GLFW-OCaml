@@ -350,10 +350,33 @@ type connection_event =
 (** Initialization hints.
 
     @see <http://www.glfw.org/docs/latest/intro_guide.html#init_hints> *)
+type angle_platform_type =
+  | OpenGL
+  | OpenGLES
+  | D3D9
+  | D3D11
+  | Vulkan
+  | Metal
+
+type platform =
+  | Win32
+  | Cocoa
+  | Wayland
+  | X11
+  | Null
+
+type wayland_libdecor =
+  | Prefer
+  | Disable
+
 type _ init_hint =
   | JoystickHatButtons : bool init_hint
   | CocoaChdirResources : bool init_hint
   | CocoaMenubar : bool init_hint
+  | AnglePlatformType : angle_platform_type option init_hint
+  | Platform : platform option init_hint
+  | X11XcbVulkanSurface : bool init_hint
+  | WaylandLibdecor : wayland_libdecor init_hint
 
 (** Video mode description as returned by getVideoMode(s).
 
@@ -454,6 +477,9 @@ external terminate : unit -> unit = "caml_glfwTerminate"
 external initHint : hint:'a init_hint -> value:'a -> unit = "caml_glfwInitHint"
 external getVersion : unit -> int * int * int = "caml_glfwGetVersion"
 external getVersionString : unit -> string = "caml_glfwGetVersionString"
+external getPlatform : unit -> platform = "caml_glfwGetPlatform"
+external platformSupported : platform:platform -> bool
+  = "caml_glfwPlatformSupported"
 external getMonitors : unit -> monitor list = "caml_glfwGetMonitors"
 external getPrimaryMonitor : unit -> monitor = "caml_glfwGetPrimaryMonitor"
 external getMonitorPos : monitor:monitor -> int * int = "caml_glfwGetMonitorPos"
